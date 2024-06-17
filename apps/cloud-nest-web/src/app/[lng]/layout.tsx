@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { dir } from 'i18next';
 import { ThemeStoreProvider } from "@/providers/theme-store";
+import { AuthStoreProvider } from "@/providers/auth-store";
 import { Languages } from '@/config';
 import { PageProps } from '@/interfaces';
 import "@/assets/styles/global.scss";
@@ -27,7 +28,9 @@ export default function RootLayout({
     <html lang={lng} dir={dir(lng)}>
       <body className={inter.className} suppressHydrationWarning>
         <ThemeStoreProvider>
-          {children}
+          <AuthStoreProvider>
+            {children}
+          </AuthStoreProvider>
         </ThemeStoreProvider>
       </body>
     </html>

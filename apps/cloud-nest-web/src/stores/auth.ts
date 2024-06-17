@@ -13,12 +13,16 @@ export function getCasdoorSDK(options?: { redirectPath?: string; }) {
 
 export type AuthState = {
   /** 用户登录信息 */
-  userInfo?: null;
+  userInfo?: any;
   /** 授权信息 */
-  token?: string;
+  access_token?: string;
+  /** 刷新授权token */
+  refresh_token?: string;
 }
 
 export type AuthActions = {
+  setUserInfo: (userInfo: any) => void;
+  setToken: (data: { access_token: string; refresh_token?: string }) => void;
 }
 
 export type AuthStore = AuthState & AuthActions
@@ -28,7 +32,20 @@ export const createDefaultAuthState = () => ({} as AuthState);
 export const createAuthStore = (
   initState: AuthState = createDefaultAuthState(),
 ) => {
-  return createStore<AuthStore>()(() => ({
+  return createStore<AuthStore>()((set) => ({
     ...initState,
+    setUserInfo: (userInfo: any) => set((state) => {
+      return {
+        ...state,
+        userInfo,
+      };
+    }),
+    setToken: (data) => set((state) => {
+      return {
+        ...state,
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+      };
+    }),
   }));
 }
