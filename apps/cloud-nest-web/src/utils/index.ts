@@ -4,19 +4,19 @@ export function setCookie(
   value: string,
   options?: {
     path?: string;
-    days?: number;
+    expiresIn?: number;
   },
 ) {
-  const { path, days } = {
+  const { path, expiresIn } = {
     path: '/',
-    days: undefined,
+    expiresIn: undefined,
     ...options,
   };
   // 将时间转换为到期时间的UTC字符串（如果天数为正数）
   let expires = '';
-  if (days) {
+  if (expiresIn !== undefined) {
     const date = new Date();
-    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    date.setTime(date.getTime() + expiresIn);
     expires = `; expires=${date.toUTCString()}`;
   }
   // 设置cookie

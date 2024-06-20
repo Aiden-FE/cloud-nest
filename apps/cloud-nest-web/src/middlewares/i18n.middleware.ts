@@ -18,7 +18,7 @@ export default function provideI18nMiddleware(req: NextRequest): MiddlewareCallb
     !req.nextUrl.pathname.startsWith('/_next')
   ) {
     return () => {
-      return NextResponse.redirect(new URL(`/${lng}${req.nextUrl.pathname}`, req.url));
+      return NextResponse.redirect(new URL(`/${lng}${req.nextUrl.pathname}${req.nextUrl.search}`, req.url));
     }
   }
 
