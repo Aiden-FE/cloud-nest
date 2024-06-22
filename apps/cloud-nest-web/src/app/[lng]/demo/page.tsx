@@ -2,11 +2,11 @@ import Image from 'next/image';
 import AppIcon from '@/components/app-icon/app-icon';
 import SettingSvg from '@/assets/svgs/setting.svg';
 import SettingSvgUrl from '@/assets/svgs/setting.svg?url';
+import { PageProps } from '@/interfaces';
 import style from './index.module.scss';
 import ThemeExample from './components/theme-example';
 import ClientI18nExample from './components/client-i18n-example';
 import ServerI18nExample from './components/server-i18n-example';
-import { PageProps } from '@/interfaces';
 
 export default function Demo({ params: { lng } }: PageProps) {
   return (
@@ -15,12 +15,12 @@ export default function Demo({ params: { lng } }: PageProps) {
       <div className={style['cp-block']}>
         block
         <div className={style['cp-block__element']}>
-        element
+          element
           <div className={style['cp-block__element_modifier']}>modifier</div>
         </div>
       </div>
       <h2 className="text-xl font-semibold mt-4">autoprefixer 展示</h2>
-      <div className="origin-top-left rotate-12 w-[80px] h-[80px] bg-[yellow]"></div>
+      <div className="origin-top-left rotate-12 w-[80px] h-[80px] bg-[yellow]" />
       <h2 className="text-xl font-semibold mt-4">Icon及Svg使用展示</h2>
       <div>
         <AppIcon className="text-4xl" icon="mdi-light:home" />

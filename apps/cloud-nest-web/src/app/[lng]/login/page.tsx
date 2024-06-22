@@ -1,9 +1,10 @@
 'use client';
 
-import { PageProps } from "@/interfaces";
-import { getCasdoorSDK } from "@/stores/auth";
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import AppLoading from '@/components/app-loading/app-loading';
+import { PageProps } from '@/interfaces';
+import { getCasdoorSDK } from '@/stores/auth';
 
 export default function Login({ params: { lng } }: PageProps) {
   const searchParams = useSearchParams();
@@ -16,10 +17,11 @@ export default function Login({ params: { lng } }: PageProps) {
     getCasdoorSDK({
       redirectPath: `/${lng}/login-callback`,
     }).signin_redirect();
-  }, []);
+  }, [lng, redirectPath]);
 
   return (
-    <>
-    </>
-  )
+    <div className="w-full h-full">
+      <AppLoading loadingProps={{ label: 'Login...' }} />
+    </div>
+  );
 }

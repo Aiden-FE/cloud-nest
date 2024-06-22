@@ -1,5 +1,5 @@
+import { NextResponse } from 'next/server';
 import { AvailableLanguages } from '@/config';
-import { NextRequest, NextResponse } from 'next/server';
 
 export interface PageProps {
   params: { lng: AvailableLanguages };

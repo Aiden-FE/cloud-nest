@@ -1,4 +1,5 @@
 'use client';
+
 import { useClientTranslation } from '@/i18n/client';
 import { AvailableLanguages } from '@/config';
 

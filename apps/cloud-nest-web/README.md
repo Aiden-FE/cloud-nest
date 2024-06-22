@@ -2,6 +2,13 @@
 
 > 资源管理器web端
 
+## Roadmap
+
+- [x] 登录失败的异常反馈
+- [ ] API路由权限保护
+- [ ] 展示图片资源
+- [ ] 404路由配置
+
 ## Features
 
 ### 支持 Sass,Postcss,autoprefixer,tailwindcss
@@ -18,7 +25,7 @@ export default function Demo() {
       <div className={style['cp-block']}>
         block
         <div className={style['cp-block__element']}>
-        element
+          element
           <div className={style['cp-block__element_modifier']}>modifier</div>
         </div>
       </div>
@@ -37,11 +44,14 @@ export default function Demo() {
 
 ```scss
 // 第二个参数控制的是前缀默认前缀是全局 $domain 值
-@include b(block) { // cp-block  cp前缀可修改variables.scss内的$domain变量来变更
+@include b(block) {
+  // cp-block  cp前缀可修改variables.scss内的$domain变量来变更
   font-size: 20px;
-  @include e(element) { // cp-block__element
+  @include e(element) {
+    // cp-block__element
     font-size: 16px;
-    @include m(modifier) { // cp-block__element_modifier
+    @include m(modifier) {
+      // cp-block__element_modifier
       font-size: 12px;
     }
   }
@@ -60,7 +70,7 @@ export default function Demo() {
       <div className={style['cp-block']}>
         block
         <div className={style['cp-block__element']}>
-        element
+          element
           <div className={style['cp-block__element_modifier']}>modifier</div>
         </div>
       </div>
@@ -70,7 +80,6 @@ export default function Demo() {
 ```
 
 > 如果需要更换 `cp` 作用域前缀请修改 `src/assets/styles/variables.scss` 文件内容的$domain值
-
 
 ### 支持 Icon及 Svg 使用
 
@@ -108,24 +117,22 @@ export default ExamplePage;
 
 ```typescript
 // src/stores/theme.ts
-import { createStore } from 'zustand/vanilla'
+import { createStore } from 'zustand/vanilla';
 
-export type ThemeState = {}
+export type ThemeState = {};
 
-export type ThemeActions = {}
+export type ThemeActions = {};
 
-export type ThemeStore = ThemeState & ThemeActions
+export type ThemeStore = ThemeState & ThemeActions;
 
-export const createDefaultThemeState = () => ({} as ThemeState);
+export const createDefaultThemeState = () => ({}) as ThemeState;
 
-export const createThemeStore = (
-  initState: ThemeState = createDefaultThemeState(),
-) => {
+export const createThemeStore = (initState: ThemeState = createDefaultThemeState()) => {
   return createStore<ThemeStore>()((set) => ({
     ...initState,
     // some actions
   }));
-}
+};
 ```
 
 创建注入器
@@ -247,7 +254,7 @@ export default function ThemeExample() {
   function setSystemTheme() {
     setTheme('system');
   }
-  
+
   // 根据当前主题打印主题值
   function consoleThemeValue() {
     // 打印特定变量名的主题值
@@ -257,14 +264,29 @@ export default function ThemeExample() {
     // 打印所有"--background"前缀的CSS变量
     console.log('获取所有"--background"前缀的CSS变量', getCurrentThemeValues(/^--background.*$/));
   }
-  
+
   return (
     <div>
       {currentTheme}
       <br />
-      <button onClick={toggleTheme} className="px-4 py-2 mr-2 font-semibold text-sm text-white rounded-md shadow-sm bg-sky-500 hover:bg-sky-600">切换主题</button>
-      <button onClick={setSystemTheme} className="px-4 py-2 mr-2 font-semibold text-sm text-white rounded-md shadow-sm bg-sky-500 hover:bg-sky-600">使用系统主题</button>
-      <button onClick={consoleThemeValue} className="px-4 py-2 font-semibold text-sm text-white rounded-md shadow-sm bg-sky-500 hover:bg-sky-600">控制台打印主题变量</button>
+      <button
+        onClick={toggleTheme}
+        className="px-4 py-2 mr-2 font-semibold text-sm text-white rounded-md shadow-sm bg-sky-500 hover:bg-sky-600"
+      >
+        切换主题
+      </button>
+      <button
+        onClick={setSystemTheme}
+        className="px-4 py-2 mr-2 font-semibold text-sm text-white rounded-md shadow-sm bg-sky-500 hover:bg-sky-600"
+      >
+        使用系统主题
+      </button>
+      <button
+        onClick={consoleThemeValue}
+        className="px-4 py-2 font-semibold text-sm text-white rounded-md shadow-sm bg-sky-500 hover:bg-sky-600"
+      >
+        控制台打印主题变量
+      </button>
     </div>
   );
 }
@@ -273,6 +295,7 @@ export default function ThemeExample() {
 ### 国际化
 
 客户端组件使用示例:
+
 ```tsx
 'use client';
 import { useClientTranslation } from '@/i18n/client';
@@ -308,6 +331,7 @@ export default ClientI18nExample;
 ```
 
 服务端组件使用示例:
+
 ```tsx
 import { useServerTranslation } from '@/i18n/server';
 import { AvailableLanguages } from '@/config';
@@ -344,10 +368,10 @@ async function I18nExample({ lng }: AppComponentProps) {
 export default I18nExample;
 
 // ./server-toggle-btns 代码如下
-'use client';
+('use client');
 
-import { AvailableLanguages } from "@/config";
-import { useClientTranslation } from "@/i18n/client";
+import { AvailableLanguages } from '@/config';
+import { useClientTranslation } from '@/i18n/client';
 
 export default function ServerToggleBtns() {
   const { changeLanguage } = useClientTranslation();
@@ -373,6 +397,6 @@ export default function ServerToggleBtns() {
         Use javascript to toggle English
       </button>
     </>
-  )
+  );
 }
 ```

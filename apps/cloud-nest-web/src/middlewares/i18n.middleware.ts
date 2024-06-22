@@ -7,6 +7,9 @@ import { MiddlewareCallback } from '@/interfaces';
 const cookieName = 'i18next';
 
 export default function provideI18nMiddleware(req: NextRequest): MiddlewareCallback {
+  if (req.nextUrl.pathname.startsWith('/api')) {
+    return undefined;
+  }
   let lng;
   if (req.cookies.has(cookieName)) lng = acceptLanguage.get(req.cookies.get(cookieName)!.value);
   if (!lng) lng = acceptLanguage.get(req.headers.get('Accept-Language'));
@@ -17,9 +20,7 @@ export default function provideI18nMiddleware(req: NextRequest): MiddlewareCallb
     !Languages.some((loc) => req.nextUrl.pathname.startsWith(`/${loc}`)) &&
     !req.nextUrl.pathname.startsWith('/_next')
   ) {
-    return () => {
-      return NextResponse.redirect(new URL(`/${lng}${req.nextUrl.pathname}${req.nextUrl.search}`, req.url));
-    }
+    return () => NextResponse.redirect(new URL(`/${lng}${req.nextUrl.pathname}${req.nextUrl.search}`, req.url));
   }
 
   if (req.headers.has('referer')) {
@@ -29,4 +30,6 @@ export default function provideI18nMiddleware(req: NextRequest): MiddlewareCallb
     if (lngInReferer) response.cookies.set(cookieName, lngInReferer);
     return () => response;
   }
+
+  return undefined;
 }

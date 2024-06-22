@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint --fix"
   },
   "browserslist": {
     "development": [
@@ -22,11 +22,15 @@
   "dependencies": {
     "@compass-aiden/styles": "^1.1.1",
     "@iconify/react": "^5.0.1",
+    "@nextui-org/react": "^2.4.2",
     "accept-language": "^3.0.18",
     "casdoor-js-sdk": "^0.14.0",
+    "framer-motion": "^11.2.11",
     "i18next": "^23.11.5",
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-resources-to-backend": "^1.2.1",
+    "ioredis": "^5.4.1",
+    "minio": "^8.0.1",
     "next": "14.2.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -34,14 +38,26 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@compass-aiden/eslint-config": "^1.6.3",
     "@svgr/webpack": "^8.1.0",
     "@types/node": "^20.14.2",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.1",
+    "@typescript-eslint/parser": "^7.13.1",
     "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-next": "^14.2.4",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jsx-a11y": "^6.9.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react": "^7.34.3",
+    "eslint-plugin-react-refresh": "^0.4.7",
     "postcss": "^8.4.38",
     "sass": "^1.77.4",
     "tailwindcss": "^3.4.4",
-    "typescript": "^5.4.5"
+    "typescript": "5.4.5"
   }
 }

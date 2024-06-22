@@ -6,12 +6,10 @@ import provideMiddlewares from './middlewares';
 acceptLanguage.languages(Languages);
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js|.*\\.svg$).*)',
-  ],
+  matcher: ['/((?!_next/static|_next/image|assets|favicon.ico|sw.js|.*\\.svg$).*)'],
 };
 
 // This function can be marked `async` if using `await` inside
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   return provideMiddlewares(req);
 }

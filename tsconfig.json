@@ -1,0 +1,3 @@
+{
+  "references": [{ "path": "apps/cloud-nest-web/tsconfig.json" }]
+}

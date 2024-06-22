@@ -17,3 +17,11 @@ export enum AvailableLanguagesNS {
 }
 
 export const Languages = [AvailableLanguages.ZH, AvailableLanguages.EN];
+
+export enum PERMISSIONS {
+  // 管理员权限
+  OSS_MANAGE = 'oss:manage',
+}
+
+// 管理员内置存储桶
+export const OSS_ADMIN_BUCKET_NAME = 'aiden-private';

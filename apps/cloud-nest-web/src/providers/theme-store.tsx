@@ -3,18 +3,15 @@
 import { type ReactNode, createContext, useRef, useContext, useEffect } from 'react';
 import { type StoreApi, useStore } from 'zustand';
 import { type ThemeStore, createThemeStore, createDefaultThemeState } from '@/stores/theme';
+import { AvailableTheme } from '@/config';
 
-export const ThemeStoreContext = createContext<StoreApi<ThemeStore> | null>(
-  null,
-);
+export const ThemeStoreContext = createContext<StoreApi<ThemeStore> | null>(null);
 
 export interface ThemeStoreProviderProps {
   children: ReactNode;
 }
 
-export const ThemeStoreProvider = ({
-  children,
-}: ThemeStoreProviderProps) => {
+export const ThemeStoreProvider = ({ children }: ThemeStoreProviderProps) => {
   const storeRef = useRef<StoreApi<ThemeStore>>();
   if (!storeRef.current) {
     storeRef.current = createThemeStore(createDefaultThemeState());
@@ -31,23 +28,20 @@ export const ThemeStoreProvider = ({
     prefersDarkMode.addEventListener('change', (event) => {
       storeRef.current?.getState().setCurrentSystemTheme(event.matches ? 'dark' : 'light');
     });
-    storeRef.current.getState().setTheme('system');
+    const localTheme = localStorage.getItem('theme');
+    if (localTheme) {
+      storeRef.current.getState().setTheme(localTheme as AvailableTheme);
+    }
   }, []);
 
-  return (
-    <ThemeStoreContext.Provider value={storeRef.current}>
-      {children}
-    </ThemeStoreContext.Provider>
-  );
+  return <ThemeStoreContext.Provider value={storeRef.current}>{children}</ThemeStoreContext.Provider>;
 };
 
-export const useThemeStore = <T,>(
-  selector: (store: ThemeStore) => T,
-): T => {
+export const useThemeStore = <T = ThemeStore,>(selector: (store: ThemeStore) => T): T => {
   const themeStoreContext = useContext(ThemeStoreContext);
 
   if (!themeStoreContext) {
-    throw new Error(`useThemeStore must be use within ThemeStoreProvider`);
+    throw new Error('useThemeStore must be use within ThemeStoreProvider');
   }
 
   return useStore(themeStoreContext, selector);
