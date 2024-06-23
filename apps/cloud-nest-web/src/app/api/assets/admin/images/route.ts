@@ -1,11 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import authGuard from '@/utils/auth-guard';
+import { NextRequest } from 'next/server';
 import MinIOService from '@/services/minio.service';
 import { OSS_ADMIN_BUCKET_NAME, PERMISSIONS } from '@/config';
+import { AppResponse, ResponseCode } from '@/utils/app-response';
+import authGuard from '@/utils/auth-guard';
 
 // eslint-disable-next-line import/prefer-default-export
 export async function GET(req: NextRequest) {
-  authGuard(req, PERMISSIONS.OSS_MANAGE);
+  const [errResp] = await authGuard(req, [PERMISSIONS.OSS_MANAGE]);
+  if (errResp) return errResp;
   const respBody = await new Promise((resolve) => {
     const result = [] as any[];
     MinIOService.client
@@ -13,19 +15,18 @@ export async function GET(req: NextRequest) {
       .on('data', async (data) => {
         result.push(data);
       })
-      .on('end', () => {
-        resolve({
-          code: 200,
-          data: result,
-          message: 'success',
+      .on('end', async () => {
+        const promiseTask = result.map(async (item) => {
+          const url = await MinIOService.client.presignedGetObject(OSS_ADMIN_BUCKET_NAME, item.name);
+          return {
+            ...item,
+            url,
+          };
         });
+        resolve(new AppResponse(await Promise.all(promiseTask)).toJson());
       })
       .on('error', (err) => {
-        resolve({
-          code: 500,
-          data: null,
-          message: err.message,
-        });
+        resolve(new AppResponse(null, ResponseCode.ERROR, err.message).toJson());
       });
   });
   return Response.json(respBody);

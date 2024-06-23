@@ -10,12 +10,18 @@ export default async function authMiddleware(req: NextRequest): Promise<Middlewa
   Languages.forEach((lng) => {
     pathName = pathName.replace(`/${lng}`, '');
   });
-  // 认证功能
-  if (!accessToken?.value && !OPEN_ROUTES.includes(pathName)) {
+  // 开放路由直接通过
+  if (OPEN_ROUTES.includes(pathName)) {
+    return undefined;
+  }
+  function goLogin() {
     const url = new URL('/login', req.url);
     url.searchParams.set('redirectPath', req.url);
     return () => NextResponse.redirect(url);
   }
-
+  // 无 token 跳转登录
+  if (!accessToken?.value) {
+    return goLogin();
+  }
   return undefined;
 }

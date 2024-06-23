@@ -9,7 +9,7 @@ import { setCookie } from '@/utils';
 import { PageProps } from '@/interfaces';
 
 export default function LoginCallback({ params: { lng } }: PageProps) {
-  const { setToken, setUserInfo } = useAuthStore((state) => state);
+  const { setToken } = useAuthStore((state) => state);
   const router = useRouter();
 
   useEffect(() => {
@@ -17,7 +17,6 @@ export default function LoginCallback({ params: { lng } }: PageProps) {
       .exchangeForAccessToken()
       .then(async (res: any) => {
         if (res?.access_token) {
-          const userInfo = await getCasdoorSDK().getUserInfo(res.access_token);
           setCookie('access_token', res.access_token, {
             expiresIn: 1000 * 60 * 60 * 24 * 7 - 1000 * 30,
           });
@@ -28,7 +27,6 @@ export default function LoginCallback({ params: { lng } }: PageProps) {
             access_token: res.access_token,
             refresh_token: res.refresh_token,
           });
-          setUserInfo(userInfo);
           const redirectPath = localStorage.getItem('redirectPath');
           if (redirectPath) {
             localStorage.removeItem('redirectPath');
@@ -46,7 +44,7 @@ export default function LoginCallback({ params: { lng } }: PageProps) {
         // eslint-disable-next-line no-console
         console.error('Debug: ', err);
       });
-  }, [lng, router, setToken, setUserInfo]);
+  }, [lng, router, setToken]);
 
   return (
     <div className="w-full h-full">
