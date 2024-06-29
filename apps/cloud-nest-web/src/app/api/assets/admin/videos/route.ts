@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   const respBody = await new Promise((resolve) => {
     const result = [] as any[];
     MinIOService.client
-      .listObjectsV2(OSS_ADMIN_BUCKET_NAME, 'projects/privacy/images', true)
+      .listObjectsV2(OSS_ADMIN_BUCKET_NAME, 'projects/privacy/videos', true)
       .on('data', async (data) => {
         result.push(data);
       })
@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
           const url = await MinIOService.client.presignedGetObject(OSS_ADMIN_BUCKET_NAME, item.name);
           return {
             ...item,
+            name: item.name.replace('projects/privacy/videos/', ''),
             url,
           };
         });

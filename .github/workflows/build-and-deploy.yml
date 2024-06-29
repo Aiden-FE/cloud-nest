@@ -1,0 +1,71 @@
+jobs:
+  pipeline:
+    name: build and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup git
+        run: |-
+          git config --local user.email github_bot@users.noreply.github.com
+          git config --local user.name GithubBot
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.20.3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.6
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: pnpm-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: Install deps
+        env:
+          HUSKY: 0
+          SKIP_INSTALL_SIMPLE_GIT_HOOKS: 1
+          SKIP_SIMPLE_GIT_HOOKS: 1
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm -r build
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Updated npm version and create commit
+        run: >-
+          npm pkg set version=${{ steps.tag_version.outputs.new_version }}
+
+          git add -A
+
+          git commit -m "chore: published tag ${{steps.tag_version.outputs.new_tag}}"
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+      # 构建并推送镜像
+      - name: Build and push to docker
+        uses: docker/build-push-action@v4
+        with:
+          context: apps/cloud-nest-web
+          push: true
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}
+            ${{ vars.DOCKERHUB_USERNAME }}/${{ vars.DOCKERHUB_IMAGE_NAME }}:latest
+name: build and deploy
+on:
+  push:
+    branches:
+      - master-disabled
+permissions:
+  contents: write
+  id-token: write

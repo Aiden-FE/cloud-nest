@@ -3,11 +3,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import ImageCard from '@/components/image-card';
 
-export default function ImagesAdminPage() {
+export default function ImagesPage() {
   const [images, setImages] = useState<{ name: string; size: number; url: string }[]>([]);
 
   async function getImages() {
-    fetch('/api/assets/admin/images', {
+    fetch('/api/assets/images', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 import { User } from 'casdoor-nodejs-sdk/lib/cjs/user';
 import { PERMISSIONS, REDIS_PREFIX } from '@/config';
-import { AppResponse, ResponseCode } from './app-response';
 import { casdoorServerSDK } from '@/stores/auth';
 import RedisService from '@/services/redis.service';
+import { AppResponse, ResponseCode } from './app-response';
 
 // 路由守卫
 export default async function authGuard(

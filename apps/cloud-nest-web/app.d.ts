@@ -1,4 +1,4 @@
-import { PERMISSIONS } from './config';
+import { PERMISSIONS } from 'src/config';
 
 declare module '*.svg' {
   import { FC, SVGProps } from 'react';

@@ -8,7 +8,11 @@ const nextConfig = {
       @import "@/assets/styles/variables.scss";
     `,
   },
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'http',
